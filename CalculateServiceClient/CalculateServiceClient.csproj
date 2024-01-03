@@ -5,6 +5,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Tgs.Calculate.Clients</RootNamespace>
+    <PackageProjectUrl>https://gitlab.com/rayprosoft/tgs-calculate-service</PackageProjectUrl>
+    <PackageId>Tgs.CalculateServiceClient</PackageId>
+    <Version>0.0.1</Version>
+    <Authors>Raypro</Authors>
+    <RepositoryUrl>https://gitlab.com/rayprosoft/tgs-calculate-service.git</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
