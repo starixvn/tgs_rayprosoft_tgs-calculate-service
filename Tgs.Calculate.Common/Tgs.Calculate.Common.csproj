@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Tgs.Calculate</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Protos\calculate.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AsyncMethodNameFixer" Version="2.3.0" PrivateAssets="all" />
+    <PackageReference Include="Grpc.Tools" Version="2.60.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="PhoenixToolkits.Protobuf.ExtendTypes" Version="0.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\calculate.proto">
+      <GrpcServices>None</GrpcServices>
+    </Protobuf>
+  </ItemGroup>
+
+</Project>

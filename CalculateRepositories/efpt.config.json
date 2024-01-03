@@ -1,0 +1,53 @@
+﻿{
+   "CodeGenerationMode": 4,
+   "ContextClassName": "TgsContext",
+   "ContextNamespace": "Entities",
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": true,
+   "IncludeConnectionString": false,
+   "ModelNamespace": "Entities",
+   "OutputContextPath": "Models",
+   "OutputPath": "Models\\Entities",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "Tgs.Calculate.Repositories",
+   "Schemas": [
+      {
+         "Name": "dbo"
+      }
+   ],
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "dbo.calculate",
+         "ObjectType": 0
+      },
+      {
+         "Name": "dbo.calculate_change_log",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "tgs-local",
+   "UncountableWords": null,
+   "UseBoolPropertiesWithoutDefaultSql": true,
+   "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": true,
+   "UseDbContextSplitting": true,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": true,
+   "UseNoDefaultConstructor": true,
+   "UseNoNavigations": true,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": true,
+   "UseSchemaFolders": true,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false
+}

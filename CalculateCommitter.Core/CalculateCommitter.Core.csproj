@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Tgs.CalculateCommitter</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AsyncMethodNameFixer" Version="2.3.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    <PackageReference Include="PhoenixToolkits.AwaitHelpers" Version="0.0.4" />
+    <PackageReference Include="PhoenixToolkits.EventBus" Version="0.0.4" />
+    <PackageReference Include="PhoenixToolkits.MessageQueue" Version="1.9.12-beta" />
+    <PackageReference Include="System.Interactive.Async" Version="6.0.1" />
+    <PackageReference Include="System.Reactive" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tgs.Calculate.Common\Tgs.Calculate.Common.csproj" />
+  </ItemGroup>
+
+</Project>

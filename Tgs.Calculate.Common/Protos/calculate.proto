@@ -1,0 +1,40 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Tgs.Calculate.Protos";
+
+import "phoenix/protobuf/guid.proto";
+import "phoenix/protobuf/decimal.proto";
+
+message BidRequest {
+	phoenix.protobuf.GuidValue calculate_id = 1;
+}
+
+message BidResponse {
+	string resource = 1;
+}
+
+message ExchangeRequest {
+	phoenix.protobuf.GuidValue calculate_id = 1;
+	phoenix.protobuf.DecimalValue change = 2;
+}
+
+message ExchangeResponse {
+	phoenix.protobuf.DecimalValue balance = 1;
+	phoenix.protobuf.GuidValue snapshot_id = 2;
+}
+
+message GetBalanceRequest {
+	phoenix.protobuf.GuidValue calculate_id = 1;
+}
+
+message DeleteRequest {
+	phoenix.protobuf.GuidValue calculate_id = 1;
+}
+
+message CreateRequest {
+	phoenix.protobuf.GuidValue calculate_id = 1;
+}
+
+message CommitRequest {
+	phoenix.protobuf.GuidValue calculate_id = 1;
+}

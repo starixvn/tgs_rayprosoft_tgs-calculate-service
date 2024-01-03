@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Tgs.CalculateCommitter.Repositories</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AsyncMethodNameFixer" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CalculateCommitter.Core\CalculateCommitter.Core.csproj" />
+    <ProjectReference Include="..\CalculateRepositories\CalculateRepositories.csproj" />
+  </ItemGroup>
+
+</Project>
