@@ -18,10 +18,10 @@ public class CommitRequestDispatchProcessorTests
         var fakeDistributeResourceManager = Substitute.For<IDistributedResourceManager>();
         var fakeMessageSender = Substitute.For<IMessageSender>();
 
-        var sut = new CommitRequestDispatchProcessor(
+        var sut = new CommitRequestDispatchHandler(
             fakeDistributeResourceManager,
             fakeMessageSender,
-            NullLogger<CommitRequestDispatchProcessor>.Instance);
+            NullLogger<CommitRequestDispatchHandler>.Instance);
 
         var calculateId = Guid.NewGuid();
         var request = new CommitRequest
@@ -35,13 +35,16 @@ public class CommitRequestDispatchProcessorTests
             .Returns(resource);
 
         var requestData = request.ToByteArray();
+        var msg = Substitute.For<IAcknowledgeMessage<ReadOnlyMemory<byte>>>();
+        _ = msg.Subject.Returns(subject);
+        _ = msg.Data.Returns(requestData);
 
         // Act
-        _ = await sut.HandleAsync(subject, requestData, null);
+        await sut.HandleAsync(msg);
 
         // Assert
         _ = fakeMessageSender.Received(1)
-            .RequestAsync<ReadOnlyMemory<byte>, ReadOnlyMemory<byte>>(
+            .SendAsync(
                 Arg.Is($"{subject}.{resource}"),
                 Arg.Is((ReadOnlyMemory<byte>)requestData),
                 Arg.Any<IEnumerable<MessageHeaderValue>>());
@@ -54,10 +57,10 @@ public class CommitRequestDispatchProcessorTests
         var fakeDistributeResourceManager = Substitute.For<IDistributedResourceManager>();
         var fakeMessageSender = Substitute.For<IMessageSender>();
 
-        var sut = new CommitRequestDispatchProcessor(
+        var sut = new CommitRequestDispatchHandler(
             fakeDistributeResourceManager,
             fakeMessageSender,
-            NullLogger<CommitRequestDispatchProcessor>.Instance);
+            NullLogger<CommitRequestDispatchHandler>.Instance);
 
         var calculateId = Guid.NewGuid();
         var request = new ExchangeRequest
@@ -77,13 +80,16 @@ public class CommitRequestDispatchProcessorTests
             });
 
         var requestData = request.ToByteArray();
+        var msg = Substitute.For<IAcknowledgeMessage<ReadOnlyMemory<byte>>>();
+        _ = msg.Subject.Returns(subject);
+        _ = msg.Data.Returns(requestData);
 
         // Act
-        _ = await sut.HandleAsync(subject, requestData, null);
+        await sut.HandleAsync(msg);
 
         // Assert
         _ = fakeMessageSender.Received(1)
-            .RequestAsync<ReadOnlyMemory<byte>, ReadOnlyMemory<byte>>(
+            .SendAsync(
                 Arg.Is($"{subject}.{resource}"),
                 Arg.Is((ReadOnlyMemory<byte>)requestData),
                 Arg.Any<IEnumerable<MessageHeaderValue>>());
@@ -96,10 +102,10 @@ public class CommitRequestDispatchProcessorTests
         var fakeDistributeResourceManager = Substitute.For<IDistributedResourceManager>();
         var fakeMessageSender = Substitute.For<IMessageSender>();
 
-        var sut = new CommitRequestDispatchProcessor(
+        var sut = new CommitRequestDispatchHandler(
             fakeDistributeResourceManager,
             fakeMessageSender,
-            NullLogger<CommitRequestDispatchProcessor>.Instance);
+            NullLogger<CommitRequestDispatchHandler>.Instance);
 
         var calculateId = Guid.NewGuid();
         var request = new ExchangeRequest
@@ -115,12 +121,16 @@ public class CommitRequestDispatchProcessorTests
             .Returns(resource, default(string));
 
         var requestData = request.ToByteArray();
+        var msg = Substitute.For<IAcknowledgeMessage<ReadOnlyMemory<byte>>>();
+        _ = msg.Subject.Returns(subject);
+        _ = msg.Data.Returns(requestData);
 
-        _ = fakeMessageSender.RequestAsync<ReadOnlyMemory<byte>, ReadOnlyMemory<byte>>(
+        _ = fakeMessageSender.SendAsync(
             Arg.Is($"{subject}.{resource}"),
             Arg.Is((ReadOnlyMemory<byte>)requestData),
-            Arg.Any<IEnumerable<MessageHeaderValue>>())
-            .ThrowsAsync(new NatsNoRespondersException());
+            Arg.Any<IEnumerable<MessageHeaderValue>>(),
+            Arg.Any<CancellationToken>())
+            .Throws(new NatsNoRespondersException());
 
         _ = fakeMessageSender.RequestAsync<BidRequest, BidResponse>(
             Arg.Is(Subjects.CommitterBidSubject),
@@ -131,14 +141,14 @@ public class CommitRequestDispatchProcessorTests
             });
 
         // Act
-        _ = await sut.HandleAsync(subject, requestData, null);
+        await sut.HandleAsync(msg);
 
         // Assert
         _ = fakeDistributeResourceManager.Received(1)
-            .DiscardBidAsync(Arg.Is(calculateId));
+            .DiscardBidAsync(Arg.Is(calculateId), Arg.Any<CancellationToken>());
 
         _ = fakeMessageSender.Received(1)
-            .RequestAsync<ReadOnlyMemory<byte>, ReadOnlyMemory<byte>>(
+            .SendAsync(
                 Arg.Is($"{subject}.{resource2}"),
                 Arg.Is((ReadOnlyMemory<byte>)requestData),
                 Arg.Any<IEnumerable<MessageHeaderValue>>());
@@ -151,10 +161,10 @@ public class CommitRequestDispatchProcessorTests
         var fakeDistributeResourceManager = Substitute.For<IDistributedResourceManager>();
         var fakeMessageSender = Substitute.For<IMessageSender>();
 
-        var sut = new CommitRequestDispatchProcessor(
+        var sut = new CommitRequestDispatchHandler(
             fakeDistributeResourceManager,
             fakeMessageSender,
-            NullLogger<CommitRequestDispatchProcessor>.Instance);
+            NullLogger<CommitRequestDispatchHandler>.Instance);
 
         var calculateId = Guid.NewGuid();
         var request = new ExchangeRequest
@@ -169,9 +179,12 @@ public class CommitRequestDispatchProcessorTests
             .Returns(resource);
 
         var requestData = request.ToByteArray();
+        var msg = Substitute.For<IAcknowledgeMessage<ReadOnlyMemory<byte>>>();
+        _ = msg.Subject.Returns(subject);
+        _ = msg.Data.Returns(requestData);
 
         // Act
-        _ = await sut.HandleAsync(subject, requestData, null);
+        await sut.HandleAsync(msg);
 
         // Assert
         _ = fakeDistributeResourceManager.Received(1)

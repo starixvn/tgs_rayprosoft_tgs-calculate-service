@@ -1,7 +1,10 @@
 ﻿using Tgs.Calculate;
+using Tgs.Calculate.Protos;
 using Tgs.CalculateWorker;
 using Tgs.CalculateWorker.ExchangeCommands;
 using Tgs.SerialNumberGenerator;
+using Valhalla.MessageQueue;
+using Xunit;
 
 namespace CalculateWorker.Core.UnitTests.CommandTests;
 
@@ -13,8 +16,12 @@ public class CreateCommandTests
         // Arrange
         var fakeFirstLevelRepository = Substitute.For<IFirstLevelRepository>();
         var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
+        var fakeMessageSender = Substitute.For<IMessageSender>();
 
-        var sut = new CreateCommand(fakeFirstLevelRepository, fakeSerialNumberGenerator);
+        var sut = new CreateCommand(
+            fakeFirstLevelRepository,
+            fakeSerialNumberGenerator,
+            fakeMessageSender);
 
         var calculateId = Guid.NewGuid();
 
@@ -38,8 +45,12 @@ public class CreateCommandTests
         // Arrange
         var fakeFirstLevelRepository = Substitute.For<IFirstLevelRepository>();
         var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
+        var fakeMessageSender = Substitute.For<IMessageSender>();
 
-        var sut = new CreateCommand(fakeFirstLevelRepository, fakeSerialNumberGenerator);
+        var sut = new CreateCommand(
+            fakeFirstLevelRepository,
+            fakeSerialNumberGenerator,
+            fakeMessageSender);
 
         var calculateId = Guid.NewGuid();
 
@@ -50,5 +61,35 @@ public class CreateCommandTests
         // Act
         _ = await Assert.ThrowsAsync<ReceptionAlreadyCreatedException>(
             async () => await sut.ExchangeAsync(calculateId, 0M, Guid.NewGuid()));
+    }
+
+    [Fact]
+    public async Task CreateCommand_建立計數器執行完成後會發出寫入DB的訊息()
+    {
+        // Arrange
+        var fakeFirstLevelRepository = Substitute.For<IFirstLevelRepository>();
+        var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
+        var fakeMessageSender = Substitute.For<IMessageSender>();
+
+        var sut = new CreateCommand(
+            fakeFirstLevelRepository,
+            fakeSerialNumberGenerator,
+            fakeMessageSender);
+
+        var calculateId = Guid.NewGuid();
+
+        var changeId = Guid.NewGuid();
+        _ = fakeSerialNumberGenerator.GenerateAsync()
+            .Returns(changeId);
+
+        // Act
+        _ = await sut.ExchangeAsync(calculateId, 0M, Guid.Empty);
+
+        // Assert
+        _ = fakeMessageSender.Received(1)
+            .PublishAsync(
+                Arg.Is(Subjects.CommitSubject),
+                Arg.Is<CommitRequest>(request => request.CalculateId.ToGuid() == calculateId),
+                Arg.Any<CancellationToken>());
     }
 }

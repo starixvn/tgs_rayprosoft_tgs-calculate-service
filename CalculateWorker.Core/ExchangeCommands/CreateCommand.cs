@@ -1,11 +1,14 @@
 ﻿using Tgs.Calculate;
+using Tgs.Calculate.Protos;
 using Tgs.SerialNumberGenerator;
+using Valhalla.MessageQueue;
 
 namespace Tgs.CalculateWorker.ExchangeCommands;
 
 internal class CreateCommand(
 	IFirstLevelRepository firstLevelRepository,
-	ISerialNumberGenerator serialNumberGenerator)
+	ISerialNumberGenerator serialNumberGenerator,
+	IMessageSender messageSender)
 	: BaseCommand
 {
 	public override async ValueTask<(decimal PostBalance, Guid SnapshotId, bool IsDelete)> ExchangeAsync(
@@ -32,6 +35,15 @@ internal class CreateCommand(
 			cancellationToken).ConfigureAwait(false);
 
 		SetResult(new ExchangeResult(changeLog.Balance, changeLog.Id));
+
+		await messageSender.PublishAsync(
+			Subjects.CommitSubject,
+			new CommitRequest
+			{
+				CalculateId = calculateId
+			},
+			cancellationToken).ConfigureAwait(false);
+
 		return (changeLog.Balance, changeLog.Id, false);
 	}
 }

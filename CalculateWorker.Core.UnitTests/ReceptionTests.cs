@@ -4,6 +4,7 @@ using Tgs.Calculate;
 using Tgs.CalculateWorker;
 using Tgs.CalculateWorker.ExchangeCommands;
 using Tgs.SerialNumberGenerator;
+using Valhalla.MessageQueue;
 
 namespace CalculateWorker.Core.UnitTests;
 
@@ -292,7 +293,8 @@ public class ReceptionTests
         var command = new ExchangeCommand(
             new ExchangeCalculate(100M),
             fakeFirstLevelRepository,
-            Substitute.For<ISerialNumberGenerator>());
+            Substitute.For<ISerialNumberGenerator>(),
+            Substitute.For<IMessageSender>());
 
         await sut.EnqueueAsync(command);
 

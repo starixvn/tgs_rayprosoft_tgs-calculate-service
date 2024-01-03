@@ -1,6 +1,7 @@
 ﻿using FluentdForward.OpenTelemetry.MessagePack;
 using Microsoft.EntityFrameworkCore;
 using NATS.Client.Core;
+using NATS.Client.JetStream.Models;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -57,12 +58,19 @@ var builder = WebApplication.CreateBuilder(args);
 		.AddMessageQueue()
 		.AddNatsMessageQueue(natsConfig => natsConfig
 			.ConfigureResolveConnection(sp => sp.GetRequiredKeyedService<NatsConnection>("Nats"))
+			.ConfigJetStream(new StreamConfig("tgs_calculate_commit", [Subjects.CommitSubject]) with
+			{
+				Storage = StreamConfigStorage.File,
+				Retention = StreamConfigRetention.Workqueue,
+				NumReplicas = 3
+			})
 			.AddProcessor(ProcessorTypes.BidProcessorType, Subjects.WorkerBidSubject)
 			.AddProcessor<ExchangeRequestDispatchProcessor>("tgs.calculate.*", "tgs.calculate.worker")
 			.AddProcessor(ProcessorTypes.CreateCalculateProcessorType, $"{Subjects.CreateSubject}.{Environment.MachineName}")
 			.AddProcessor(ProcessorTypes.DeleteCalculateProcessorType, $"{Subjects.DeleteSubject}.{Environment.MachineName}")
 			.AddProcessor(ProcessorTypes.ExchangeCalculateProcessorType, $"{Subjects.ExchangeSubject}.{Environment.MachineName}")
 			.AddProcessor(ProcessorTypes.GetBalanceProcessorType, $"{Subjects.GetBalanceSubject}.{Environment.MachineName}"))
+		.AddNatsJetStreamGlobPatternExchange(Subjects.CommitSubject)
 		.AddNatsGlobPatternExchange("*");
 
 	var instrumentationExtenionFilters = new[] { "html", "ico", "png", "jpg" };

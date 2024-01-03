@@ -6,21 +6,17 @@ using Valhalla.MessageQueue;
 
 namespace Tgs.CalculateCommitter.MessageQueue;
 
-public class CommitRequestDispatchProcessor(
+public class CommitRequestDispatchHandler(
 	IDistributedResourceManager distributedResourceManager,
 	IMessageSender messageSender,
-	ILogger<CommitRequestDispatchProcessor> logger)
-	: IMessageProcessor<ReadOnlyMemory<byte>, ReadOnlyMemory<byte>>
+	ILogger<CommitRequestDispatchHandler> logger)
+	: IAcknowledgeMessageHandler<ReadOnlyMemory<byte>>
 {
-	public async ValueTask<ReadOnlyMemory<byte>> HandleAsync(
-		string subject,
-		ReadOnlyMemory<byte> data,
-		IEnumerable<MessageHeaderValue>? headerValues,
-		CancellationToken cancellationToken = default)
+	public async ValueTask HandleAsync(IAcknowledgeMessage<ReadOnlyMemory<byte>> msg, CancellationToken cancellationToken = default)
 	{
-		var request = BidRequest.Parser.ParseFrom(data.Span);
+		var request = BidRequest.Parser.ParseFrom(msg.Data.Span);
 
-		return await Policy
+		await Policy
 			.Handle<NatsNoRespondersException>()
 			.RetryAsync(
 				1,
@@ -39,20 +35,20 @@ public class CommitRequestDispatchProcessor(
 						request,
 						cancellationToken).ConfigureAwait(false);
 
-					var response = await messageSender.RequestAsync<ReadOnlyMemory<byte>, ReadOnlyMemory<byte>>(
-						$"{subject}.{resource}",
-						data,
+					await messageSender.SendAsync(
+						$"{msg.Subject}.{resource}",
+						msg.Data,
 						cancellationToken).ConfigureAwait(false);
 
 					await distributedResourceManager.ExtendBidAsync(
 						request.CalculateId,
 						CommitterConsts.BidExpiry,
 						cancellationToken).ConfigureAwait(false);
-
-					return response;
 				},
 				cancellationToken)
 			.ConfigureAwait(false);
+
+		await msg.AckAsync(cancellationToken).ConfigureAwait(false);
 	}
 
 	private async Task<string> GetResourceAsync(BidRequest request, CancellationToken cancellationToken)

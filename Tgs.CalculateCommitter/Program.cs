@@ -1,6 +1,7 @@
 ﻿using FluentdForward.OpenTelemetry.MessagePack;
 using Microsoft.EntityFrameworkCore;
 using NATS.Client.Core;
+using NATS.Client.JetStream.Models;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -55,8 +56,20 @@ var builder = WebApplication.CreateBuilder(args);
 		.AddMessageQueue()
 		.AddNatsMessageQueue(natsConfig => natsConfig
 			.ConfigureResolveConnection(sp => sp.GetRequiredKeyedService<NatsConnection>("Nats"))
+			.ConfigJetStream(new StreamConfig("tgs_calculate_commit", [Subjects.CommitSubject]) with
+			{
+				Storage = StreamConfigStorage.File,
+				Retention = StreamConfigRetention.Workqueue,
+				NumReplicas = 3
+			})
 			.AddProcessor(ProcessorTypes.BidProcessorType, Subjects.CommitterBidSubject)
-			.AddProcessor<CommitRequestDispatchProcessor>("tgs.calculate-committer.*", "tgs.calculate.committer")
+			.AddJetStreamHandler<CommitRequestDispatchHandler>(
+				Subjects.CommitSubject,
+				"tgs_calculate_commit",
+				new ConsumerConfig("tgs_calculate_commit_batch") with
+				{
+					MaxAckPending = 1
+				})
 			.AddReplyHandler(ProcessorTypes.CommitHandlerType, $"{Subjects.CommitSubject}.{Environment.MachineName}"))
 		.AddNatsGlobPatternExchange("*");
 

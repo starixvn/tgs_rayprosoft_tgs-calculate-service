@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Tgs.Calculate;
 using Tgs.CalculateWorker;
 using Tgs.SerialNumberGenerator;
+using Valhalla.MessageQueue;
 
 namespace CalculateWorker.Core.UnitTests;
 
@@ -17,6 +18,7 @@ public class ExchangerTests
         var fakeFirstLevelRepository = Substitute.For<IFirstLevelRepository>();
         var fakeTgsRepository = Substitute.For<ITgsRepository>();
         var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
+        var fakeMessageSender = Substitute.For<IMessageSender>();
 
         var serviceProvider = new ServiceCollection()
             .AddSingleton(TimeProvider.System)
@@ -24,6 +26,7 @@ public class ExchangerTests
             .AddSingleton(fakeFirstLevelRepository)
             .AddSingleton(fakeTgsRepository)
             .AddSingleton(fakeSerialNumberGenerator)
+            .AddSingleton(fakeMessageSender)
             .BuildServiceProvider();
         var fakeHostApplicationLifetime = Substitute.For<IHostApplicationLifetime>();
 
@@ -274,6 +277,7 @@ public class ExchangerTests
         var fakeFirstLevelRepository = Substitute.For<IFirstLevelRepository>();
         var fakeTgsRepository = Substitute.For<ITgsRepository>();
         var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
+        var fakeMessageSender = Substitute.For<IMessageSender>();
 
         var serviceProvider = new ServiceCollection()
             .AddSingleton(TimeProvider.System)
@@ -281,6 +285,7 @@ public class ExchangerTests
             .AddSingleton(fakeFirstLevelRepository)
             .AddSingleton(fakeTgsRepository)
             .AddSingleton(fakeSerialNumberGenerator)
+            .AddSingleton(fakeMessageSender)
             .BuildServiceProvider();
         var fakeHostApplicationLifetime = Substitute.For<IHostApplicationLifetime>();
 
@@ -373,6 +378,7 @@ public class ExchangerTests
         var fakeFirstLevelRepository = Substitute.For<IFirstLevelRepository>();
         var fakeTgsRepository = Substitute.For<ITgsRepository>();
         var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
+        var fakeMessageSender = Substitute.For<IMessageSender>();
 
         var serviceProvider = new ServiceCollection()
             .AddSingleton(TimeProvider.System)
@@ -380,6 +386,7 @@ public class ExchangerTests
             .AddSingleton(fakeFirstLevelRepository)
             .AddSingleton(fakeTgsRepository)
             .AddSingleton(fakeSerialNumberGenerator)
+            .AddSingleton(fakeMessageSender)
             .BuildServiceProvider();
         var fakeHostApplicationLifetime = Substitute.For<IHostApplicationLifetime>();
 
@@ -408,6 +415,7 @@ public class ExchangerTests
         var fakeFirstLevelRepository = Substitute.For<IFirstLevelRepository>();
         var fakeTgsRepository = Substitute.For<ITgsRepository>();
         var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
+        var fakeMessageSender = Substitute.For<IMessageSender>();
 
         var serviceProvider = new ServiceCollection()
             .AddSingleton(TimeProvider.System)
@@ -415,6 +423,7 @@ public class ExchangerTests
             .AddSingleton(fakeFirstLevelRepository)
             .AddSingleton(fakeTgsRepository)
             .AddSingleton(fakeSerialNumberGenerator)
+            .AddSingleton(fakeMessageSender)
             .BuildServiceProvider();
         var fakeHostApplicationLifetime = Substitute.For<IHostApplicationLifetime>();
 
