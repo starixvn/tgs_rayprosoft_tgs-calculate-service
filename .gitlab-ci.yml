@@ -50,7 +50,6 @@ push-k8s-template:
     - push_k8s_template $HelmTemplateServiceFolderName $ServiceImageName $Tag
     - push_k8s_template $HelmTemplateWorkerFolderName $WorkerImageName $Tag
     - push_k8s_template $HelmTemplateCommitterFolderName $CommitterImageName $Tag
-    - push_k8s_template $HelmTemplateQueryFolderName $QueryImageName $Tag
 
 deploy-service-dev:
   extends: .deploy-template
