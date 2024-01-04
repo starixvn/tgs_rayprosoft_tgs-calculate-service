@@ -32,7 +32,8 @@ public class CalculateExchangeTests
                 .ConfigureServices(services => services
                     .AddMessageQueue()
                     .AddDirectMessageQueue(config => config
-                        .AddProcessor(ProcessorTypes.CreateCalculateProcessorType, subject))
+                        .AddProcessor(ProcessorTypes.CreateCalculateProcessorType, subject)
+                        .AddHandler<StubMessageHandler>(Subjects.CommitSubject))
                     .ClearAllExchanges()
                     .AddDirectGlobPatternExchange("*")));
 
@@ -68,7 +69,8 @@ public class CalculateExchangeTests
                 .ConfigureServices(services => services
                     .AddMessageQueue()
                     .AddDirectMessageQueue(config => config
-                        .AddProcessor(ProcessorTypes.ExchangeCalculateProcessorType, subject))
+                        .AddProcessor(ProcessorTypes.ExchangeCalculateProcessorType, subject)
+                        .AddHandler<StubMessageHandler>(Subjects.CommitSubject))
                     .ClearAllExchanges()
                     .AddDirectGlobPatternExchange("*")));
 
@@ -115,7 +117,8 @@ public class CalculateExchangeTests
                 .ConfigureServices(services => services
                     .AddMessageQueue()
                     .AddDirectMessageQueue(config => config
-                        .AddProcessor(ProcessorTypes.GetBalanceProcessorType, subject))
+                        .AddProcessor(ProcessorTypes.GetBalanceProcessorType, subject)
+                        .AddHandler<StubMessageHandler>(Subjects.CommitSubject))
                     .ClearAllExchanges()
                     .AddDirectGlobPatternExchange("*")));
 
@@ -157,7 +160,8 @@ public class CalculateExchangeTests
                 .ConfigureServices(services => services
                     .AddMessageQueue()
                     .AddDirectMessageQueue(config => config
-                        .AddProcessor(ProcessorTypes.DeleteCalculateProcessorType, subject))
+                        .AddProcessor(ProcessorTypes.DeleteCalculateProcessorType, subject)
+                        .AddHandler<StubMessageHandler>(Subjects.CommitSubject))
                     .ClearAllExchanges()
                     .AddDirectGlobPatternExchange("*")));
 

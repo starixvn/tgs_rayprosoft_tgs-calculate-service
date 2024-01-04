@@ -4,7 +4,6 @@ using Tgs.CalculateWorker;
 using Tgs.CalculateWorker.ExchangeCommands;
 using Tgs.SerialNumberGenerator;
 using Valhalla.MessageQueue;
-using Xunit;
 
 namespace CalculateWorker.Core.UnitTests.CommandTests;
 

@@ -33,6 +33,7 @@ public class CommitCalculateTests
         await using var web = CalculateCommitterTestHost.Instance
             .WithWebHostBuilder(hostBuilder => hostBuilder
                 .ConfigureServices(services => services
+                    .Decorate<ITgsRepository, WrapTgsRepository>()
                     .AddMessageQueue()
                     .AddDirectMessageQueue(config => config
                         .AddHandler(ProcessorTypes.CommitHandlerType, subject))
@@ -65,14 +66,9 @@ public class CommitCalculateTests
                 [new RedisValue(JsonSerializer.Serialize(data, _SerializerOptions))],
                 Array.Empty<RedisValue>());
 
-        var tcs = new TaskCompletionSource();
-        var eventBus = web.Services.GetRequiredService<IEventBus>();
-        using var sub = eventBus.GetEventObserable<ExchangeEvent>(CommitterConsts.UpdateEventName)!
-            .Subscribe(evt => tcs.SetResult());
-
         // Act
         await sut.SendAsync(subject, request);
-        await tcs.Task;
+        await WrapTgsRepository.AfterSnapshot;
         var actual = await dbContext.CalculateChangeLogs.ToArrayAsync();
 
         // Assert
