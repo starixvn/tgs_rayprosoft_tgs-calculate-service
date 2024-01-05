@@ -37,6 +37,7 @@ internal class CommonTgsRepository(TgsContext dbContext, ILogger<CommonTgsReposi
 				Change = record.Change,
 				Balance = record.Balance,
 				RecordedOn = record.RecordedOn.ToUniversalTime(),
+				Deleted = record.Deleted
 			}),
 			cancellationToken).ConfigureAwait(false);
 
@@ -89,21 +90,42 @@ internal class CommonTgsRepository(TgsContext dbContext, ILogger<CommonTgsReposi
 			return;
 
 		if (calculateRow is null)
-			_ = await dbContext.Calculates.AddAsync(
+			calculateRow = (await dbContext.Calculates.AddAsync(
 				new Entities.Calculate
 				{
 					Id = calculateId,
 					Balance = newestRecord.Balance,
-					SnapshotId = newestRecord.Id
+					SnapshotId = newestRecord.Id,
+					Deleted = newestRecord.Deleted
 				},
-				cancellationToken).ConfigureAwait(false);
+				cancellationToken).ConfigureAwait(false)).Entity;
 		else
 		{
 			calculateRow.Balance = newestRecord.Balance;
 			calculateRow.SnapshotId = newestRecord.Id;
+			calculateRow.Deleted = newestRecord.Deleted;
 		}
 
 		_ = await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+		if (calculateRow.Deleted)
+		{
+			using var trans = await dbContext.Database
+				.BeginTransactionAsync(cancellationToken)
+				.ConfigureAwait(false);
+			await using (trans.ConfigureAwait(false))
+			{
+				dbContext.Calculates.Remove(calculateRow);
+				_ = dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+				await dbContext.CalculateChangeLogs
+					.Where(log => log.CalculateId == calculateRow.Id)
+					.ExecuteDeleteAsync(cancellationToken)
+					.ConfigureAwait(false);
+
+				await trans.CommitAsync(cancellationToken).ConfigureAwait(false);
+			}
+		}
 	}
 }
 

@@ -23,6 +23,9 @@ namespace Tgs.Calculate.Repositories.Entities.Configurations
             entity.Property(e => e.Balance).HasColumnName("balance");
             entity.Property(e => e.CalculateId).HasColumnName("calculate_id");
             entity.Property(e => e.Change).HasColumnName("change");
+            entity.Property(e => e.Deleted)
+            .HasDefaultValue(false)
+            .HasColumnName("deleted");
             entity.Property(e => e.RecordedOn).HasColumnName("recorded_on");
 
             OnConfigurePartial(entity);

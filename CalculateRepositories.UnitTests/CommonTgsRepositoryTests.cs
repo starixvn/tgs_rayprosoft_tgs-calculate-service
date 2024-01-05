@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Logging.Abstractions;
 using Tgs.Calculate;
 using Tgs.Calculate.Repositories;
@@ -177,6 +179,7 @@ public class CommonTgsRepositoryTests
         Assert.Single(actual);
         Assert.Equal(records[0].Id, actual.First().Id);
         Assert.Equal(records[0].Balance, actual.First().Balance);
+        Assert.False(records[0].Deleted);
     }
 
     [Fact]
@@ -386,5 +389,59 @@ public class CommonTgsRepositoryTests
 
         // Assert
         Assert.Equal(0, actual);
+    }
+
+    [Fact]
+    public async Task CommonTgsRepository_更新計算快照值_如果資料已經標記刪除會進行清除()
+    {
+        // Arrange
+        var dbContextOptions = new DbContextOptionsBuilder<TgsContext>()
+            .UseInMemoryDatabase(Guid.NewGuid().ToString())
+            .ConfigureWarnings(builder => builder.Ignore(InMemoryEventId.TransactionIgnoredWarning))
+            .ReplaceService<IQueryCompilationContextFactory, TestQueryCompilationContextFactory>()
+            .Options;
+
+        var dbContext = new TgsContext(dbContextOptions);
+
+        var sut = new CommonTgsRepository(dbContext, NullLogger<CommonTgsRepository>.Instance);
+
+        var calculateId = Guid.NewGuid();
+
+        await dbContext.CalculateChangeLogs.AddRangeAsync([
+            new CalculateChangeLog
+            {
+                Id = Guid.Parse("007df1e7-3b27-491a-8cc1-51e37ef6bc5a"),
+                Balance = 100M,
+                CalculateId = calculateId,
+                Change = 100M,
+                RecordedOn = DateTime.UtcNow
+            },
+            new CalculateChangeLog
+            {
+                Id = Guid.Parse("0087851e-54ec-4b29-91fa-d93e6ad4b2c4"),
+                Balance = 100M,
+                CalculateId = calculateId,
+                Change = 0M,
+                RecordedOn = DateTime.UtcNow,
+                Deleted = true
+            }]);
+
+        _ = await dbContext.Calculates.AddAsync(new Calculate
+        {
+            Id = calculateId,
+            Balance = 0M,
+            SnapshotId = Guid.Parse("007df1e7-3b27-491a-8cc1-51e37ef6bc5a")
+        });
+
+        await dbContext.SaveChangesAsync();
+
+        // Act
+        await sut.UpdateSnapshotAsync(calculateId);
+        var actual = await dbContext.Calculates.FirstOrDefaultAsync();
+        var actualLogCount = await dbContext.CalculateChangeLogs.CountAsync();
+
+        // Assert
+        Assert.Null(actual);
+        Assert.Equal(0, actualLogCount);
     }
 }

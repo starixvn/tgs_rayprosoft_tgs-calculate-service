@@ -5,6 +5,7 @@ using Tgs.CalculateWorker;
 using Tgs.CalculateWorker.ExchangeCommands;
 using Tgs.SerialNumberGenerator;
 using Valhalla.MessageQueue;
+using Xunit;
 
 namespace CalculateWorker.Core.UnitTests;
 
@@ -50,6 +51,44 @@ public class ReceptionTests
         // Assert
         Assert.Equal(1234M, actual.Balance);
         Assert.Equal(snapshotId, actual.SnapshotId);
+    }
+
+    [Fact]
+    public async Task Reception_初始化的計數如果是已經刪除的_不能執行命令()
+    {
+        // Arrange
+        var calculateId = Guid.NewGuid();
+        var snapshotId = Guid.NewGuid();
+        var fakeFirstLevelRepository = Substitute.For<IFirstLevelRepository>();
+        var fakeTgsRepository = Substitute.For<ITgsRepository>();
+
+        var sut = new Reception(
+            calculateId,
+            TimeSpan.FromMinutes(1),
+            TimeProvider.System,
+            NullLogger<Reception>.Instance);
+
+        _ = fakeFirstLevelRepository.GetNewestExchangeLogAsync(
+            Arg.Is(calculateId),
+            Arg.Any<CancellationToken>())
+            .Returns(new ExchangeLog(
+                snapshotId,
+                calculateId,
+                0,
+                1234M,
+                DateTime.UtcNow,
+                true));
+
+        var initCommand = new InitialCommand(
+            fakeFirstLevelRepository,
+            fakeTgsRepository);
+
+        // Act
+        await sut.StartReceiveAsync(initCommand);
+        var command = new ReadCommand();
+
+        await sut.EnqueueAsync(command);
+        _ = await Assert.ThrowsAsync<ReceptionDeletedException>(async () => await command);
     }
 
     [Fact]

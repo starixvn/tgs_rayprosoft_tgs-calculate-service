@@ -21,6 +21,9 @@ namespace Tgs.Calculate.Repositories.Entities.Configurations
             .ValueGeneratedNever()
             .HasColumnName("id");
             entity.Property(e => e.Balance).HasColumnName("balance");
+            entity.Property(e => e.Deleted)
+            .HasDefaultValue(false)
+            .HasColumnName("deleted");
             entity.Property(e => e.SnapshotId).HasColumnName("snapshot_id");
 
             OnConfigurePartial(entity);
