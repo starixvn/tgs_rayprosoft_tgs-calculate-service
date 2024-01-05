@@ -22,7 +22,7 @@ public class CalculateExchangeTests
     };
 
     [Fact]
-    public async void 整合測試_建立一個新的計數()
+    public async Task 整合測試_建立一個新的計數()
     {
         // Arrange
         var subject = $"{Subjects.CreateSubject}.test";
