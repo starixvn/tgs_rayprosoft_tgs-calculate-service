@@ -72,7 +72,7 @@ internal class CommonRedisRepository(IDatabase redisDatabase)
 			expiry: expiry,
 			when: When.NotExists).ConfigureAwait(false);
 
-		return (string)result!;
+		return result.HasValue ? (string)result! : resource;
 	}
 
 	public async ValueTask<string?> GetBidResourceAsync(Guid calculateId, string role)
