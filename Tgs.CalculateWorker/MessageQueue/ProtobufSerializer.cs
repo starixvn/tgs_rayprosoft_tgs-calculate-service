@@ -24,7 +24,7 @@ public class ProtobufSerializer<T> : INatsSerializer<T>
 
 	public T? Deserialize(in ReadOnlySequence<byte> buffer)
 	{
-		if (typeof(T).IsAssignableFrom(typeof(IMessage)))
+		if (typeof(T).IsAssignableTo(typeof(IMessage)))
 		{
 			var instance = Activator.CreateInstance(typeof(T)) as IMessage;
 
