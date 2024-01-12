@@ -32,8 +32,6 @@ internal class DeleteCommand(
 			changeLog,
 			cancellationToken).ConfigureAwait(false);
 
-		SetResult(new ExchangeResult(balance, changeLog.Id, true));
-
 		await messageSender.PublishAsync(
 			Subjects.CommitSubject,
 			new CommitRequest
@@ -41,6 +39,8 @@ internal class DeleteCommand(
 				CalculateId = calculateId
 			},
 			cancellationToken).ConfigureAwait(false);
+
+		SetResult(new ExchangeResult(balance, changeLog.Id, true));
 
 		return (changeLog.Balance, changeLog.Id, true);
 	}

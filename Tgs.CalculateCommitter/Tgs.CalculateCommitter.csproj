@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CalculateCommitter.Core\CalculateCommitter.Core.csproj" />
     <ProjectReference Include="..\CalculateCommitter.Repositories\CalculateCommitter.Repositories.csproj" />
+    <ProjectReference Include="..\Tgs.Calculate.MessageSerializers\Tgs.Calculate.MessageSerializers.csproj" />
   </ItemGroup>
 
 </Project>

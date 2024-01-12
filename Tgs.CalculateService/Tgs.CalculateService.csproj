@@ -7,6 +7,7 @@
     <UserSecretsId>1f1cd520-7dda-4919-8f8b-cf3c03a53a5f</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <ContainerRepository>pgtgs/calculate-api</ContainerRepository>
+    <SqlQueryToolsConnectionString />
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Tgs.Calculate.Common\Tgs.Calculate.Common.csproj" />
+    <ProjectReference Include="..\Tgs.Calculate.MessageSerializers\Tgs.Calculate.MessageSerializers.csproj" />
   </ItemGroup>
 
 </Project>

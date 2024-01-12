@@ -1,6 +1,6 @@
 ﻿using NATS.Client.Core;
 
-namespace Tgs.CalculateCommitter.MessageQueue;
+namespace Tgs.Calculate.MessageSerializers;
 
 public class ProtobufSerializerRegistration : INatsSerializerRegistry
 {

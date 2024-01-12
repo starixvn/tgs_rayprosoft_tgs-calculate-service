@@ -1,11 +1,9 @@
 ﻿using FluentdForward.OpenTelemetry.MessagePack;
-using Microsoft.Extensions.Options;
 using NATS.Client.Core;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using Tgs.CalculateService.Models;
+using Tgs.Calculate.MessageSerializers;
 
 var builder = WebApplication.CreateBuilder(args);
 {

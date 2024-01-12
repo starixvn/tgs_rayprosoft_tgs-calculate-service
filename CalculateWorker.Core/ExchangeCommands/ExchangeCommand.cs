@@ -32,12 +32,12 @@ internal class ExchangeCommand(
 			changeLog,
 			cancellationToken).ConfigureAwait(false);
 
-		SetResult(new ExchangeResult(changeLog.Balance, exchangeId));
-
 		await messageSender.PublishAsync(
 			Subjects.CommitSubject,
 			new CommitRequest { CalculateId = calculateId },
 			cancellationToken).ConfigureAwait(false);
+
+		SetResult(new ExchangeResult(changeLog.Balance, exchangeId));
 
 		return (changeLog.Balance, exchangeId, false);
 	}

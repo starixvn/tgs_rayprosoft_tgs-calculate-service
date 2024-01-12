@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using Google.Protobuf;
 using NATS.Client.Core;
 
-namespace Tgs.CalculateWorker.MessageQueue;
+namespace Tgs.Calculate.MessageSerializers;
 
 public class ProtobufSerializer<T> : INatsSerializer<T>
 {

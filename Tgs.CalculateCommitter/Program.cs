@@ -7,6 +7,7 @@ using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using StackExchange.Redis;
 using Tgs.Calculate;
+using Tgs.Calculate.MessageSerializers;
 using Tgs.CalculateCommitter.MessageQueue;
 
 var builder = WebApplication.CreateBuilder(args);

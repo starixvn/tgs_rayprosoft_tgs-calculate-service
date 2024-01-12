@@ -34,8 +34,6 @@ internal class CreateCommand(
 			changeLog,
 			cancellationToken).ConfigureAwait(false);
 
-		SetResult(new ExchangeResult(changeLog.Balance, changeLog.Id));
-
 		await messageSender.PublishAsync(
 			Subjects.CommitSubject,
 			new CommitRequest
@@ -43,6 +41,8 @@ internal class CreateCommand(
 				CalculateId = calculateId
 			},
 			cancellationToken).ConfigureAwait(false);
+
+		SetResult(new ExchangeResult(changeLog.Balance, changeLog.Id));
 
 		return (changeLog.Balance, changeLog.Id, false);
 	}

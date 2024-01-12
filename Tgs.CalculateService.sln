@@ -37,15 +37,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculateRepositories", "Ca
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculateRepositories.UnitTests", "CalculateRepositories.UnitTests\CalculateRepositories.UnitTests.csproj", "{76122445-12B2-4A89-916A-75A7FF600620}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.CalculateCommitter", "Tgs.CalculateCommitter\Tgs.CalculateCommitter.csproj", "{43B517F9-6AAD-44C9-92A6-455CDDE13495}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.CalculateCommitter", "Tgs.CalculateCommitter\Tgs.CalculateCommitter.csproj", "{43B517F9-6AAD-44C9-92A6-455CDDE13495}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.CalculateCommitter.IntegrationTests", "Tgs.CalculateCommitter.IntegrationTests\Tgs.CalculateCommitter.IntegrationTests.csproj", "{4AFD30D1-3FEC-4E8E-9F12-6A39CF377459}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.CalculateCommitter.IntegrationTests", "Tgs.CalculateCommitter.IntegrationTests\Tgs.CalculateCommitter.IntegrationTests.csproj", "{4AFD30D1-3FEC-4E8E-9F12-6A39CF377459}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiRole", "ApiRole", "{5E931824-0203-4B15-9E1A-65E6B974E772}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculateServiceClient", "CalculateServiceClient\CalculateServiceClient.csproj", "{EEFB62EC-D08D-49AA-93D9-ED09C5E13C24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculateServiceClient", "CalculateServiceClient\CalculateServiceClient.csproj", "{EEFB62EC-D08D-49AA-93D9-ED09C5E13C24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.CalculateService.IntegrationTests", "Tgs.CalculateService.IntegrationTests\Tgs.CalculateService.IntegrationTests.csproj", "{81DF20DC-4FA4-4C71-94C6-EE4DB46C9A86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.CalculateService.IntegrationTests", "Tgs.CalculateService.IntegrationTests\Tgs.CalculateService.IntegrationTests.csproj", "{81DF20DC-4FA4-4C71-94C6-EE4DB46C9A86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.Calculate.MessageSerializers", "Tgs.Calculate.MessageSerializers\Tgs.Calculate.MessageSerializers.csproj", "{9256F589-B2A0-420B-A8EC-58692869C27E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,6 +119,10 @@ Global
 		{81DF20DC-4FA4-4C71-94C6-EE4DB46C9A86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81DF20DC-4FA4-4C71-94C6-EE4DB46C9A86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81DF20DC-4FA4-4C71-94C6-EE4DB46C9A86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9256F589-B2A0-420B-A8EC-58692869C27E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9256F589-B2A0-420B-A8EC-58692869C27E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9256F589-B2A0-420B-A8EC-58692869C27E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9256F589-B2A0-420B-A8EC-58692869C27E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
