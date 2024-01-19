@@ -7,8 +7,8 @@ using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using StackExchange.Redis;
 using Tgs.Calculate;
-using Tgs.Calculate.MessageSerializers;
 using Tgs.CalculateCommitter.MessageQueue;
+using Tgs.MessageQueue.Nats.Serializers;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -52,7 +52,7 @@ var builder = WebApplication.CreateBuilder(args);
 			(sp, _) => new NatsConnection(NatsOpts.Default with
 			{
 				Url = builder.Configuration.GetConnectionString("Nats")!,
-				SerializerRegistry = ProtobufSerializerRegistration.Default
+				SerializerRegistry = TgsNatsSerializerRegistration.Default
 			}))
 		.AddMessageQueue()
 		.AddNatsMessageQueue(natsConfig => natsConfig

@@ -1,6 +1,6 @@
 ﻿using System.Buffers;
-using Tgs.Calculate.MessageSerializers;
 using Tgs.Calculate.Protos;
+using Tgs.MessageQueue.Nats.Serializers;
 
 namespace Tgs.CalculateWorker.IntegrationTests;
 
@@ -10,7 +10,7 @@ public class ProtobufSerializeTests
     public void 序列化測試_BidRequest()
     {
         // Arrange
-        var sut = ProtobufSerializerRegistration.Default;
+        var sut = TgsNatsSerializerRegistration.Default;
 
         var data = new BidRequest
         {
@@ -31,7 +31,7 @@ public class ProtobufSerializeTests
     public void 序列化測試_BidResponse()
     {
         // Arrange
-        var sut = ProtobufSerializerRegistration.Default;
+        var sut = TgsNatsSerializerRegistration.Default;
 
         var data = new BidResponse
         {
@@ -52,7 +52,7 @@ public class ProtobufSerializeTests
     public void 序列化測試_ExchangeRequest()
     {
         // Arrange
-        var sut = ProtobufSerializerRegistration.Default;
+        var sut = TgsNatsSerializerRegistration.Default;
 
         var data = new ExchangeRequest
         {
@@ -75,7 +75,7 @@ public class ProtobufSerializeTests
     public void 序列化測試_ExchangeResponse()
     {
         // Arrange
-        var sut = ProtobufSerializerRegistration.Default;
+        var sut = TgsNatsSerializerRegistration.Default;
 
         var data = new ExchangeResponse
         {
@@ -98,7 +98,7 @@ public class ProtobufSerializeTests
     public void 序列化測試_GetBalanceRequest()
     {
         // Arrange
-        var sut = ProtobufSerializerRegistration.Default;
+        var sut = TgsNatsSerializerRegistration.Default;
 
         var data = new GetBalanceRequest
         {
@@ -119,7 +119,7 @@ public class ProtobufSerializeTests
     public void 序列化測試_DeleteRequest()
     {
         // Arrange
-        var sut = ProtobufSerializerRegistration.Default;
+        var sut = TgsNatsSerializerRegistration.Default;
 
         var data = new DeleteRequest
         {
@@ -140,7 +140,7 @@ public class ProtobufSerializeTests
     public void 序列化測試_CreateRequest()
     {
         // Arrange
-        var sut = ProtobufSerializerRegistration.Default;
+        var sut = TgsNatsSerializerRegistration.Default;
 
         var data = new CreateRequest
         {
@@ -161,7 +161,7 @@ public class ProtobufSerializeTests
     public void 序列化測試_CommitRequest()
     {
         // Arrange
-        var sut = ProtobufSerializerRegistration.Default;
+        var sut = TgsNatsSerializerRegistration.Default;
 
         var data = new CommitRequest
         {
